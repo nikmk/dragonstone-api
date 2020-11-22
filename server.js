@@ -440,6 +440,9 @@ app.post("/api/capture", async (req, res) => {
 
 
 // -------------------------------------//
+
+const PORT = process.env.PORT || 3000;
+
 async function connect() {
   try {
     mongoose.Promise = global.Promise;
@@ -451,8 +454,8 @@ async function connect() {
   } catch (err) {
     console.log('Mongoose error', err);
   }
-  app.listen(80);
-  console.log('API listening on localhost:80');
+  app.listen(PORT);
+  console.log(`API listening on localhost:${PORT}`);
 }
 
 connect();
