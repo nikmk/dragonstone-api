@@ -11,6 +11,15 @@ const InventoryItem = require('./data/InventoryItem');
 // const paymentRoutes = require('./paymentapi/paymentService');
 const paymentData = require('./data/paymentData');
 const cookieParser = require('cookie-parser')
+const Razorpay = require('razorpay')
+const request = require('request')
+
+const instance = new Razorpay({
+  key_id: process.env.key_id,
+  key_secret: process.env.key_secret
+})
+
+
 const csrf = require('csurf')
 const csrfProtection = csrf(
   {
@@ -359,12 +368,78 @@ app.get('/api/paymentdata', async (req, res) => {
 });
 
 
+// ------------- Razorpay ------------- //
+const orderAmount = []
+const orderID = []
+app.post('/api/pay',checkJwt,requireAdmin, async (req, res) => {
+  try {
+    orderAmount.push(req.body.amount)
+    const options = {
+      amount: orderAmount[0] *100,  // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "order_rcptid_11",
+      payment: {
+        capture: "automatic",
+        capture_options: {
+          automatic_expiry_period : 12,
+          manual_expiry_period : 7200,
+          refund_speed : "optimum"
+        }}
+    };
+    instance.orders.create(options, function(err, order) {
+      orderID.push(order)
+      res.json(order)
+    });
+    
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      message: 'There was a problem creating the item'
+    });
+  }
+});
+
+
+app.post("/api/capture", async (req, res) => {
+  
+  try {
+    return request(
+     {
+     method: "POST",
+     url: `https://${process.env.key_id}:${process.env.key_secret}@api.razorpay.com/v1/payments/${req.body.paymentId}/capture`,
+     form: {
+        amount: orderAmount[0] *100, // amount == Rs 10 // Same As Order amount
+        currency: "INR" ,
+      }, 
+    }, 
+   async function (err, response, body) {
+     if (err) {
+      return res.status(500).json({
+         message: "Something Went Wrong",
+       }); 
+     }
+      console.log("Status:", response.statusCode);
+      console.log("Headers:", JSON.stringify(response.headers));
+      console.log("Response:", body);
+      return res.status(200).json(body);
+    });
+
+
+   } 
+  catch (err) {
+    return res.status(500).json({
+      message: "Something Went Wrong",
+   });
+  }
+});
 
 
 
 
 
 
+
+// -------------------------------------//
 async function connect() {
   try {
     mongoose.Promise = global.Promise;
