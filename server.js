@@ -125,8 +125,8 @@ app.post('/api/signup', async (req, res) => {
     const savedUser = await newUser.save();
 
     if (savedUser) {
-      const token = createToken(savedUser);
-      const decodedToken = jwtDecode(token);
+      const token = await createToken(savedUser);
+      const decodedToken = await jwtDecode(token);
       const expiresAt = decodedToken.exp;
 
       const {
@@ -170,10 +170,10 @@ const attachUser = (req,res,next) => {
     return res.status(401).json({message:'Authentication invalid'})
   }
 
-  const decodedToken = jwtDecode(token)
+  const decodedToken = await jwtDecode(token)
 
   if(!decodedToken){
-    return res.status(401).json({message:'There was aproblem authorizing'})
+    return res.status(401).json({message:'There was a problem authorizing'})
   }else{
     req.user = decodedToken
     next();
