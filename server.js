@@ -75,7 +75,6 @@ app.post('/api/authenticate', async (req, res) => {
       const expiresAt = decodedToken.exp;
 
       res.cookie('token',token,{
-        maxAge:10000000,
         httpOnly: true
       })
 
