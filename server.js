@@ -74,9 +74,9 @@ app.post('/api/authenticate', async (req, res) => {
       const { password, bio, ...rest } = user;
       const userInfo = Object.assign({}, { ...rest });
 
-      const token = createToken(userInfo);
+      const token = await createToken(userInfo);
 
-      const decodedToken = jwtDecode(token);
+      const decodedToken = await jwtDecode(token);
       const expiresAt = decodedToken.exp;
 
       res.cookie('token',token,{

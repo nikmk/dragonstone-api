@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const createToken = user => {
+const createToken = async user => {
   // Sign the JWT
   if (!user.role) {
     throw new Error('No user role specified');
