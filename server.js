@@ -38,7 +38,7 @@ const {
 
 const app = express();
 
-app.use(cors( { origin: true, credentials: true }))
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser())
@@ -74,8 +74,6 @@ app.post('/api/authenticate', async (req, res) => {
 
       res.cookie('token',token,{
         httpOnly: true,
-        secure: true,
-        sameSite: "none"
       })
 
       res.json({
@@ -145,7 +143,6 @@ app.post('/api/signup', async (req, res) => {
         role
       };
       res.cookie('token',token,{
-        maxAge:10000000,
         httpOnly: true
       })
 
@@ -189,7 +186,7 @@ const checkJwt = jwt({
   secret: process.env.JWT_SECRET ,
   issue: 'api.dragonstone',
   audience: 'api.dragonstone',
-  getToken: req => req.headers.token
+  getToken: req => req.cookies.token
 })
 
 // app.use(csrfProtection)
