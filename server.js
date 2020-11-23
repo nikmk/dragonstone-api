@@ -38,9 +38,7 @@ const {
 
 const app = express();
 
-
-// { origin: true, credentials: true }
-app.use(cors())
+app.use(cors( { origin: true, credentials: true }))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser())
@@ -76,7 +74,8 @@ app.post('/api/authenticate', async (req, res) => {
 
       res.cookie('token',token,{
         httpOnly: true,
-
+        secure: true,
+        sameSite: "lax"
       })
 
       res.json({
