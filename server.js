@@ -20,12 +20,12 @@ const instance = new Razorpay({
 })
 
 
-const csrf = require('csurf')
-const csrfProtection = csrf(
-  {
-    cookie: true
-  }
-)
+// const csrf = require('csurf')
+// const csrfProtection = csrf(
+//   {
+//     cookie: true
+//   }
+// )
 
 
 const {
@@ -192,11 +192,11 @@ const checkJwt = jwt({
   getToken: req => req.cookies.token
 })
 
-app.use(csrfProtection)
+// app.use(csrfProtection)
 
-app.get('/api/csrf-token',(req,res)=>{
-  res.json({csrfToken : req.csrfToken()})
-})
+// app.get('/api/csrf-token',(req,res)=>{
+//   res.json({csrfToken : req.csrfToken()})
+// })
 
 
 
