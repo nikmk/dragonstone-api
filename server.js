@@ -189,7 +189,7 @@ const checkJwt = jwt({
   secret: process.env.JWT_SECRET ,
   issue: 'api.dragonstone',
   audience: 'api.dragonstone',
-  getToken: req => req.cookies.token
+  getToken: req => req.token
 })
 
 // app.use(csrfProtection)
