@@ -45,6 +45,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser())
 
+app.use(csrfProtection)
 
 app.post('/api/authenticate', async (req, res) => {
   try {
@@ -192,7 +193,7 @@ const checkJwt = jwt({
   getToken: req => req.cookies.token
 })
 
-app.use(csrfProtection)
+
 app.get('/api/csrf-token',(req,res)=>{
   res.json({csrfToken : req.csrfToken()})
 })
