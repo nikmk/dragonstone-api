@@ -75,7 +75,8 @@ app.post('/api/authenticate', async (req, res) => {
       const expiresAt = decodedToken.exp;
 
       res.cookie('token',token,{
-        httpOnly: true
+        httpOnly: true,
+        sameSite:"strict"
       })
 
       res.json({
