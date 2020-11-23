@@ -75,7 +75,7 @@ app.post('/api/authenticate', async (req, res) => {
       res.cookie('token',token,{
         httpOnly: true,
         secure: true,
-        sameSite: "lax"
+        sameSite: "none"
       })
 
       res.json({
