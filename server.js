@@ -164,13 +164,13 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-const attachUser = (req,res,next) => {
+const attachUser = async(req,res,next) => {
   const token = req.cookies.token
   if(!token){
     return res.status(401).json({message:'Authentication invalid'})
   }
 
-  const decodedToken = await jwtDecode(token)
+  const decodedToken =  await jwtDecode(token)
 
   if(!decodedToken){
     return res.status(401).json({message:'There was a problem authorizing'})
